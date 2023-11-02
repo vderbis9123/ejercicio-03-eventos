@@ -8,7 +8,7 @@ function App() {
         <div id="logo-img">
           <img src={logo} />
         </div>
-        <h1>Fundamentos de GitHub Actions</h1>
+        <h1>Fundamentos de GitHub Actions y Eventos</h1>
       </header>
       <MainContent />
     </>
