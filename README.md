@@ -2,6 +2,27 @@
 
 Ahora para esta sección del curso he preparado otro proyecto de ejemplo, que en realidad está basado en el mismo proyecto de ejemplo anterior, pero que ya viene con un workflow, un archivo **eventos.yml** situado en la carpeta **.github>workflows** donde tenemos definido un workflow de demostración muy simple. Sin embargo, falta el evento porque eso es exactamente lo que revisaremos y en lo que nos sumergiremos en este módulo del taller.
 
+<pre>
+name: Ejercicio con Eventos
+on: ...
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mostrar datos del evento
+        run: echo "${{ toJSON(github.event) }}"
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Ejecutar pruebas
+        run: npm run test
+      - name: Compilar código
+        run: npm run build
+      - name: Desplegar el proyecto
+        run: echo "Desplegando..."
+</pre>
+
 A continuación tenemos 2 secciones claramente diferenciadas. La primera detallará los pasos que debemos seguir para preparar nuestro entorno para el desarrollo del ejercicio. Y la segunda parte detalla el desarrollo completo de los ejercicios, paso a paso.
 
 ## Preparación del ejercicio
