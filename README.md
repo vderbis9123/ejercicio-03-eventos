@@ -4,7 +4,7 @@ Ahora para esta sección del curso he preparado otro proyecto de ejemplo, que en
 
 <pre>
 name: Ejercicio con Eventos
-on: ...
+<span style="color:DarkRed;">on: ...</span>
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -105,7 +105,7 @@ A continuación tenemos 2 secciones claramente diferenciadas. La primera detalla
     
     <pre>
     name: Ejercicio con Eventos
-    <b>on: [push, workflow_dispatch]</b>
+    <span style="color:Navy;"><b>on: [push, workflow_dispatch]</b></span>
     jobs:
       deploy:
         runs-on: ubuntu-latest
