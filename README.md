@@ -132,6 +132,30 @@ A continuación tenemos 2 secciones claramente diferenciadas. La primera detalla
     git push
     </pre>
 
+15. Volvemos a la página de nuestro proyecto e ingresamos a la pestaña de **Actions**, donde se nos mostrará una advertencia indicando que los workflows están desactivados porque venían ya en el repo desde el que se hizo el fork.
+
+    ![Lanzamos nuestro workflow](img/workflows-disabled.png)
+
+    Para activar nuestro workflow, simplemente le damos clic al botón verde **I understand my workflows, go ahead and enable them**.
+
+16. Una vez activados los workflows nuevamente, seleccionamos en el panel de la izquierda nuestro workflow **Ejercicio con Eventos** y en el panel derecho le damos clic a **Run workflow**. Luego de unos segundos, obtendremos el resultado de dicha ejecución:
+
+    ![Lanzamos nuestro workflow](img/run-workflow.png)
+
+17. Luego, podremos ver nuestro workflow en el segundo panel de la extensión de GitHub Actions en nuestro entorno de desarrollo (probablemente sea necesario darle clic al botón **Refresh**).
+
+    ![Lanzamos nuestro workflow](img/workflows-updated.png)
+
+18. (Opcional) Si intentamos lanzar nuestro workflow con el botón **Trigger workflow**, la paleta de comandos nos solicitará confirmar la referencia para la ejecución de nuestro workflow. Aquí podemos confirmar el valor por defecto dándole simplemente a ***Enter***.
+
+    ![Lanzamos nuestro workflow](img/enter-ref.png)
+
+    Sin embargo, esta es una funcionalidad que por el momento todavía no está soportada en GitHub CodeSpaces, por lo que se nos mostrará el siguiente mensaje de error:
+
+    ![Lanzamos nuestro workflow](img/trigger-workflow-error.png)
+
+    A pesar de esto, la extensión no tiene problemas en mostrarnos el estado de los workflows gatillados de cualquier otra forma, tal como en el caso de nuestra primera ejecución manual. 
+
 Por fin, con este paso tenemos nuestro entorno listo para proceder con el desarrollo del ejercicio a continuación.
 
 ## Desarrollo del ejercicio
