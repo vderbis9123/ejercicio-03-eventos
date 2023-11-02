@@ -1,2 +1,1 @@
-# ejercicio-03-eventos
-Profundizando en Workflows y Eventos
+# Ejercicio 03 - Profundizando en Workflows y Eventos
