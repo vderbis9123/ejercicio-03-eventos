@@ -160,157 +160,109 @@ Por fin, con este paso tenemos nuestro entorno listo para proceder con el desarr
 
 ## Desarrollo del ejercicio
 
-1. Para iniciar el desarrollo del ejercicio, debemos crear nuestro archivo de workflow en la estructura de carpetas correspondiente (.gitflow>worflows>test.yml) e ingresamos los detalles iniciales del workflow:
+1. Para iniciar el desarrollo del ejercicio, actualizamos nuestro documento de workflow reemplazando el contenido de la directiva **on**:
    
    	<pre>
-    name: Mi Demo con React
-    on: push
+    name: Ejercicio con Eventos
+    <span style="color:Navy;"><b>on:
+      pull_request:
+        types:
+          - opened
+      workflow_dispatch:</b></span>
     jobs:
-      test:
+      deploy:
         runs-on: ubuntu-latest
         steps:
-         - name: Obtener código</pre>
-    
-   A partir de este punto, en vez de digitar el código vamos a continuar agregando código con los gists compartidos en clase. Y luego de cada cambio, vamos a verificar el estado de nuestros workflows tanto en el portal como en la extensión habilitada en nuestro entorno de desarrollo.
+          - name: Mostrar datos del evento
+            run: echo "${{ toJSON(github.event) }}"
+          - name: Obtener código
+            uses: actions/checkout@v4
+          - name: Instalar dependencias
+            run: npm ci
+          - name: Ejecutar pruebas
+            run: npm run test
+          - name: Compilar código
+            run: npm run build
+          - name: Desplegar el proyecto
+            run: echo "Desplegando..."</pre>
    
-2. Completamos ahora el código de nuestro workflow con las líneas resaltadas en el siguiente bloque.
-   
-    <pre>
-    name: Mi Demo con React
-    on: push
-    jobs:
-      test:
-        runs-on: ubuntu-latest
-        steps:
-         - name: Obtener código
-           <b>uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm ci
-         - name: Ejecutar pruebas
-           run: npm test</b></pre>
-
-3. Renombramos nuestro workflow como **deploy.yml** y agregamos el job correspondiente.
-
-    <pre>
-    name: Mi Demo con React
-    on: push
-    jobs:
-      test:
-        runs-on: ubuntu-latest
-        steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm ci
-         - name: Ejecutar pruebas
-           run: npm test
-     <b>deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm install
-         - name: Compilar el proyecto
-           run: npm run build
-         - name: Desplogar el artefacto
-           run: echo "Desplegando..."</b></pre>
-
-4. Agregamos una expresión condicional para asegurar la secuencialidad de los jobs:
-
-    <pre>
-    name: Mi Demo con React
-    on: push
-    jobs:
-      test:
-        runs-on: ubuntu-latest
-        steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm ci
-         - name: Ejecutar pruebas
-           run: npm test
-     deploy:
-       <b>needs: test</b>
-       runs-on: ubuntu-latest
-       steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm install
-         - name: Compilar el proyecto
-           run: npm run build
-         - name: Desplogar el artefacto
-           run: echo "Desplegando..."</pre>
-
-5. Agregamos el soporte de múltiples triggers a nuestro workflow.
-
-    <pre>
-    name: Mi Demo con React
-    on: <b>[push, workflow_dispatch]</b>
-    jobs:
-      test:
-        runs-on: ubuntu-latest
-        steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm ci
-         - name: Ejecutar pruebas
-           run: npm test
-     deploy:
-       needs: test
-       runs-on: ubuntu-latest
-       steps:
-         - name: Obtener código
-           uses: actions/checkout@v4
-         - name: Instalar Node.JS
-           uses: actions/setup-node@v3
-           with:
-             node-version: 18
-         - name: Instalar Dependencias
-           run: npm install
-         - name: Compilar el proyecto
-           run: npm run build
-         - name: Desplogar el artefacto
-           run: echo "Desplegando..."</pre>
-
-6. Finalmente, vamos a crear otro workflow (**output.yml**), asociado a un trigger de eventos en el módulo de issues de nuestro repositorio, y que muestre información de contexto de GitHub y hace uso de expresiones para formatear esa información de forma adecuada. 
+2. Sincronizamos nuestros cambios hacia el repositorio con los siguientes comandos:
    
    <pre>
-   name: Información de Salida
-   on: issues
-     jobs:
-       info:
-         runs-on: ubuntu-latest
-         steps:
-           - name: Mostrar contexto de GitHub
-             run: echo "${{ toJSON(github) }}"
-           - name: Mostrar detalles del Job
-             run: echo "${{ toJSON(job) }}"
-   </pre> 
+   git add .
+   git commit -m "Adición de tipos de actividades"
+   git push</pre>
+
+3. Verificamos en la pestaña **Actions** de nuestro repositorio y vemos que no hay más ejecuciones de nuestro workflow.
+   
+   ![No hay más ejecuciones de nuestro workflow](img/no-new-workflow-runs.png)
+
+4. Agregamos una nueva rama denominada **dev**:
+   
+   <pre>
+   git checkout -b dev</pre>
+
+5. Hacemos un pequeño cambio en el encabezado en nuestro archivo **App.jsx**.
+
+   ```
+   import MainContent from './components/MainContent';
+   import logo from './assets/images/logo.png';
+
+   function App() {
+     return (
+       <>
+         <header>
+           <div id="logo-img">
+             <img src={logo} />
+           </div>
+           <h1>Fundamentos de GitHub Actions y Eventos</h1>
+         </header>
+         <MainContent />
+       </>
+     );
+   }
+
+   export default App;
+   ```
+   
+6. Sincronizamos nuestros cambios hacia una nueva rama en el repositorio con los siguientes comandos:
+   
+   <pre>
+   git add .
+   git commit -m "Cambio de encabezado"
+   git push origin dev</pre>
+
+7. Volvemos a nuestro repositorio y cambiamos a la pestaña **Code**. Se nos mostrará una notificación de push reciente a la rama dev, y hacemos clic en el botón verde **Compare & pull request**.
+   
+   ![Notificación de push reciente a dev](img/dev-recent-push.png)
+
+8. En la configuración del pull request nos aseguramos de seleccionar en ambos casos nuestro repositorio (no de aquel que hicimos fork). Y en la vista de comparación de cambios confirmamos la creación del pull request dando clic en el botón verde **Create pull request**.
+   
+   ![Comparación de cambios](img/comparing-changes.png)
+
+9. Cambiamos a la pestaña **Actions** y ahora sí vemos la nueva ejecución gatillada al crear el pull request.
+   
+   ![Nueva ejecución de nuestro workflow](img/new-workflow-run.png)
+
+10. Igual, en nuestro entorno de desarrollo también podemos ver la nueva ejecución en el panel **Workflows** de la extensión de GitHub Actions.
+   
+    ![Nueva ejecución de nuestro workflow en VS Code](img/new-workflow-run-vscode.png)
+
+11. Volvemos a nuestro repositorio y cambiamos a la pestaña **Pull requests** y veremos que aparece listado nuestro reciente pull request, y hacemos clic en su nombre **Cambio de encabezado**.
+   
+    ![Listado de pull requests](img/pull-requests-list.png)
+
+12. Para probar el evento de cierre del pull request y validar si se ejecuta o no nuestro workflow, vamos a hacer clic en el botón verde **Merge pull request**.
+   
+    ![Detalles del pull request](img/merge-pull-request.png)
+
+13. Paso seguido, hacemos clic en el botón verde **Confirm merge**.
+   
+    ![Detalles del pull request](img/confirm-merge-pull-request.png)
+
+14. Se nos muestra la confirmación del pull request cerrado.
+   
+    ![Detalles del pull request](img/pull-request-closed.png)
+
+15. Volvemos a nuestra pestaña **Actions** y, efectivamente, no hay nuevas ejecuciones.
+    ![No hay nuevas ejecuciones de nuestro workflow](img/new-workflow-run.png)
